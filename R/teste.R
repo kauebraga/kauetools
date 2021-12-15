@@ -51,7 +51,7 @@ extract_scheduled_stops <- function(gtfs, service_id1 = NULL, route_id1 = NULL) 
 
   # abrir stop times
   # get stoptimes
-  stop_times <- gtfs$stop_times[trip_id %in% trips$trip_id]
+  stop_times <- setDT(gtfs$stop_times)[trip_id %in% trips$trip_id]
   stop_times <- stop_times[, .(trip_id, stop_id, arrival_time, departure_time, stop_sequence)]
 
   # abrir trips
