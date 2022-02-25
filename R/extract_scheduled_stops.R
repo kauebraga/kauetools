@@ -3,9 +3,9 @@
 #' Returns the most common service (the sequence of stops on the `stop_times` file) for each shape
 #'
 #' @param gtfs A GTFS object.
-#' @param service_id A character specifying a service (from the `calendar`) to subset, if desired. This is specially
+#' @param service_id A character specifying a service (from `calendar`) to subset, if desired. This is specially
 #' useful for large GTFS file where one is interested only on weekdays trips, for example.
-#' @param route_id A character specifying a route (from the `routes`) to subset, if desired
+#' @param route_id A character specifying a route (from `routes`) to subset, if desired
 #'
 #' @return A `data.table`.with the scheduled service (sequence of stops) for each `route` and `shape_id`
 #'
@@ -34,7 +34,7 @@
 
 
 
-extract_scheduled_stops <- function(gtfs, service_id1 = NULL, route_id1 = NULL) {
+extract_scheduled_stops <- function(gtfs, service_id = NULL, route_id = NULL) {
 
   # get trips
   trips <- gtfs$trips

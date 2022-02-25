@@ -4,15 +4,15 @@
 \alias{extract_scheduled_stops}
 \title{Extract the most common set of scheduled stops for each route}
 \usage{
-extract_scheduled_stops(gtfs, service_id1 = NULL, route_id1 = NULL)
+extract_scheduled_stops(gtfs, service_id = NULL, route_id = NULL)
 }
 \arguments{
 \item{gtfs}{A GTFS object.}
 
-\item{service_id}{A character specifying a service (from the \code{calendar}) to subset, if desired. This is specially
+\item{service_id}{A character specifying a service (from \code{calendar}) to subset, if desired. This is specially
 useful for large GTFS file where one is interested only on weekdays trips, for example.}
 
-\item{route_id}{A character specifying a route (from the \code{routes}) to subset, if desired}
+\item{route_id}{A character specifying a route (from \code{routes}) to subset, if desired}
 }
 \value{
 A \code{data.table}.with the scheduled service (sequence of stops) for each \code{route} and \code{shape_id}
