@@ -1,4 +1,4 @@
-#' Ecreate linestrings from shapes
+#' Create linestrings from shapes
 #'
 #' Returns the most common service (the sequence of stops on the `stop_times` file) for each shape
 #'
@@ -29,6 +29,7 @@
 #' trip_geometry
 #' plot(trip_geometry["origin_file"])
 #'
+#'@export
 shapes_to_sf <- function(gtfs, shape_id = NULL) {
 
   # generate geometry; the condition for nrow == 0 prevents an sfheaders error
