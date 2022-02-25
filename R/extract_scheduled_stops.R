@@ -36,14 +36,17 @@
 
 extract_scheduled_stops <- function(gtfs, service_id = NULL, route_id = NULL) {
 
+
+  env <- environment()
+
   # get trips
   trips <- gtfs$trips
 
   # filter trips by route
-  trips <- if (!is.null(route_id1)) trips[route_id %in% route_id1] else trips
+  trips <- if (!is.null(route_id)) trips[route_id %in% get("route_id", envir = env)] else trips
 
   # filter trips by service
-  trips <- if (!is.null(service_id1)) trips[service_id %in% service_id1] else trips
+  trips <- if (!is.null(service_id)) trips[service_id %in%  get("service_id", envir = env)] else trips
 
   stops <- gtfs$stops[, .(stop_id, stop_name, stop_lon, stop_lat)]
   # stops_sf <- stops %>%
