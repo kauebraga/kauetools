@@ -1,13 +1,10 @@
-#' Create linestrings from shapes
+#' Calculate distances and speeds for stop_times segments
 #'
-#' Returns the most common service (the sequence of stops on the `stop_times` file) for each shape
+#' Returns the GTFS with the stop_time file with columns of distance and speed
 #'
 #' @param gtfs A GTFS object.
-#' @param service_id A character specifying a service (from the `calendar`) to subset, if desired. This is specially
-#' useful for large GTFS file where one is interested only on weekdays trips, for example.
-#' @param route_id A character specifying a route (from the `routes`) to subset, if desired
 #'
-#' @return A `data.table`.with the scheduled service (sequence of stops) for each `route` and `shape_id`
+#' @return A `gtfs` object with updated stop_times
 #'
 #' @section Details:
 #' Details here.
@@ -40,14 +37,14 @@
 
 
 # Em qual ponto do arquivo shapes encontra-se a parada daquela linha e sentido?
-shapes_stops_dists <- function(gtfs) {
+calculate_dist_stop_times <- function(gtfs) {
 
   # gtfs <- read_gtfs("../../data-raw/dissertacao/gtfs/2018/GTFS_fortaleza_20180907.zip")
   # gtfs <- read_gtfs("/media/kaue/Data/data-raw/gtfs/brazil/cur/2019/gtfs_cur_urbs_2019-05.zip")
   # gtfs <- read_gtfs("/media/kaue/Data/data-raw/gtfs/brazil/spo/2019/gtfs_spo_sptrans_2019-04.zip")
   # gtfs <- read_gtfs("/media/kaue/Data/data-raw/gtfs/brazil/cam/2019/gtfs_cam_emdec_2019-10_fixed.zip")
   # gtfs <- read_gtfs("/media/kaue/Data/data-raw/gtfs/brazil/rio/2019/gtfs_rio_fetranspor_2019-10_mod.zip")
-  gtfs <- read_gtfs("/media/kaue/Data/data-raw/gtfs/brazil/rio/intersul_v1.zip")
+  # gtfs <- read_gtfs("/media/kaue/Data/data-raw/gtfs/brazil/rio/intersul_v1.zip")
   # gtfs <- read_gtfs("../../repos/curso_r_transportes/data-raw/gtfs_brt_08-10-2021.zip")
 
   # calcular stops_linha
@@ -81,6 +78,7 @@ shapes_stops_dists <- function(gtfs) {
   # make sure every shape on the stop files are on the shapes
   shapes_linhas <- subset(shapes_linhas, shape_id %in% stop_linhas$shape_id)
 
+  # shape_id1 <- shapes_linhas$shape_id[20]
 
   shapes_stops_dists_shape <- function(shape_id1) {
 
@@ -100,7 +98,7 @@ shapes_stops_dists <- function(gtfs) {
     shapes_linhas_filter[, shape_pt_sequence := 1:.N]
     # calculate shape dist traveled
     get.dist <- function(lon, lat) geosphere::distGeo(tail(cbind(lon,lat),-1),head(cbind(lon,lat),-1))
-    shapes_linhas_filter[, shape_dist_traveled1 := c(0,cumsum(get.dist(shape_pt_lon,shape_pt_lat)))]
+    shapes_linhas_filter[, shape_dist_traveled := c(0,cumsum(get.dist(shape_pt_lon,shape_pt_lat)))]
 
 
 
@@ -267,18 +265,18 @@ shapes_stops_dists <- function(gtfs) {
   trechos <- trechos[!is.na(trechos)]
   trechos <- rbindlist(trechos)
 
-  # bring to stop_times
-  stop_times <- gtfs$stop_times
   # bring shape_id to stop_times
-  stop_times[gtfs$trips, on = "trip_id",
+  gtfs$stop_times[gtfs$trips, on = "trip_id",
              c("shape_id") := list(i.shape_id)]
-  stop_times[trechos, on = c("shape_id", "stop_id", "stop_sequence"),
+  gtfs$stop_times[trechos, on = c("shape_id", "stop_id", "stop_sequence"),
              c("dist_acc") := list(i.dist_acc)]
   # calculate speeds
-  stop_times[, arrival_time1 := hms_to_sec(arrival_time)]
-  stop_times[, ':='(ttime = arrival_time1 - shift(arrival_time1, 1, type = "lag"),
+  gtfs$stop_times[, arrival_time1 := hms_to_sec(arrival_time)]
+  gtfs$stop_times[, ':='(ttime = arrival_time1 - shift(arrival_time1, 1, type = "lag"),
                     dist = dist_acc - shift(dist_acc, 1, type = "lag")), by = "trip_id"]
-  stop_times[, speed := (dist/as.integer(ttime)) *3.6 ]
+  gtfs$stop_times[, speed := (dist/as.integer(ttime)) *3.6 ]
+
+  return(gtfs)
 
 
 
