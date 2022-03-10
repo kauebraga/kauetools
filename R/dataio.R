@@ -21,7 +21,7 @@ create_data_structure <- function() {
 #' Read data based on my structure
 #'
 #' @param file Filename
-#' @param type Type. data or data-raw?
+#' @param folder Folder data or data-raw?
 #'
 #' @export
 
@@ -31,7 +31,7 @@ read_data <- function(file, folder = "data", ...) {
   project_name <- basename(rstudioapi::getActiveProject())
 
   # make path
-  path <- sprintf("../../%s/%s/%s", type, project_name, file)
+  path <- sprintf("../../%s/%s/%s", folder, project_name, file)
 
   # open
   if (tools::file_ext(path) == "csv") {
