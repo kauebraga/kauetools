@@ -61,7 +61,7 @@ read_data <- function(file, folder = "data", ...) {
 #' @param file Filename
 #'
 #' @export
-write_data <- function(data, file) {
+write_data <- function(data, file, ...) {
 
   # get project name
   project_name <- basename(rstudioapi::getActiveProject())
@@ -83,7 +83,7 @@ write_data <- function(data, file) {
 
   } else if (tools::file_ext(path) %in% c("gpkg", "shp")) {
 
-    st_write(data, path)
+    st_write(data, path, ...)
 
   }
 

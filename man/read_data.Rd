@@ -4,12 +4,12 @@
 \alias{read_data}
 \title{Read data based on my structure}
 \usage{
-read_data(file, type = "data")
+read_data(file, folder = "data", ...)
 }
 \arguments{
 \item{file}{Filename}
 
-\item{type}{Type. data or data-raw?}
+\item{folder}{Folder data or data-raw?}
 }
 \description{
 Read data based on my structure

@@ -4,7 +4,7 @@
 \alias{write_data}
 \title{Write data based on my structure}
 \usage{
-write_data(data, file)
+write_data(data, file, ...)
 }
 \arguments{
 \item{data}{Data to be written to disk}
