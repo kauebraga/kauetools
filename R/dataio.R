@@ -25,7 +25,7 @@ create_data_structure <- function() {
 #'
 #' @export
 
-read_data <- function(file, type = "data") {
+read_data <- function(file, folder = "data", ...) {
 
   # get project name
   project_name <- basename(rstudioapi::getActiveProject())
@@ -44,7 +44,7 @@ read_data <- function(file, type = "data") {
 
   } else if (tools::file_ext(path) %in% c("gpkg", "shp")) {
 
-    a <- st_read(path)
+    a <- st_read(path, ...)
 
   }
 
