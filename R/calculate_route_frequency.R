@@ -14,11 +14,11 @@
 #' @export
 
 # function to calculate route frequency on gtfs
-gtfs_path <- "/home/kaue/Documents/Downloads_linux_notebook/gtfs_for_etufor_2019-10.zip"
-gtfs_path <- "/home/kaue/Documents/Downloads_linux_notebook/gtfs_spo_bernardo_2020-11.zip"
-gtfs_path <- "/home/kaue/Documents/Downloads_linux_notebook/gtfs_cur_urbs_2019-10.zip"
+# gtfs_path <- "/home/kaue/Documents/Downloads_linux_notebook/gtfs_for_etufor_2019-10.zip"
+# gtfs_path <- "/home/kaue/Documents/Downloads_linux_notebook/gtfs_spo_bernardo_2020-11.zip"
+# gtfs_path <- "/home/kaue/Documents/Downloads_linux_notebook/gtfs_cur_urbs_2019-10.zip"
 # lines to be changed frequency
-gtfs <- read_gtfs(gtfs_path, encoding = "UTF-8")
+# gtfs <- read_gtfs(gtfs_path, encoding = "UTF-8")
 
 # route_id <- "026"; service_id <- c("U"); start_time <- "06:00:00"; end_time <- "08:00:00"
 # route_id1 <- "240"; service_id1 <- c("159-155", "166-156"); start_time <- "06:00:00"; end_time <- "08:00:00"
@@ -75,9 +75,9 @@ calculate_route_frequency <- function(gtfs, route_id = NULL, service_id = NULL,
                                     by = .(route_id, direction_id, shape_id, route_long_name)]
     } else {
 
-      frequencies_filter[, hour := data.table::hour(arrival_time)]
-      headways <- stop_times_starts_filter[, .(headway_mean = as.integer(mean(headway, na.rm = TRUE))),
-                                           by = .(route_id, direction_id, shape_id, route_long_name, hour, trip_headsign)]
+      frequencies_filter[, hour := data.table::hour(start_time)]
+      headways <- frequencies_filter[, .(headway_mean = headway_secs/60),
+                                           by = .(route_id, direction_id, shape_id, route_long_name, hour)]
 
     }
 
