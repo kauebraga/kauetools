@@ -25,7 +25,8 @@
 # route_id <- "CPTM L11"; service_id <- c("USD", "U__"); start_time <- "06:00:00"; end_time <- "08:00:00"
 
 calculate_route_frequency <- function(gtfs, route_id = NULL, service_id = NULL,
-                                      start_time = "06:00:00", end_time = "08:00:00") {
+                                      start_time = "06:00:00", end_time = "08:00:00",
+                                      mean_headway = FALSE) {
 
   env <- environment()
 
@@ -44,6 +45,9 @@ calculate_route_frequency <- function(gtfs, route_id = NULL, service_id = NULL,
 
   # filter trips by service
   trips <- if (!is.null(get("service_id", envir = env))) trips[service_id %in% get("service_id", envir = env)] else trips
+
+  # add shape_id to trips if shapes is not available
+  if (is.null(trips$shape_id)) trips[, shape_id := NA] else trips
 
   # get route info
   routes <- gtfs$routes[, .(route_id, route_long_name)]
@@ -127,6 +131,6 @@ calculate_route_frequency <- function(gtfs, route_id = NULL, service_id = NULL,
 
   }
 
-  return(headways_pico)
+  return(headways)
 
 }
