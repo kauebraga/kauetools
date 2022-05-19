@@ -12,6 +12,7 @@
 #' @return A `data.table` with the headway for each `route` and `shape_id`
 #'
 #' @export
+#'
 
 # function to calculate route frequency on gtfs
 # gtfs_path <- "/home/kaue/Documents/Downloads_linux_notebook/gtfs_for_etufor_2019-10.zip"
@@ -127,6 +128,6 @@ calculate_route_frequency <- function(gtfs, route_id = NULL, service_id = NULL,
 
   }
 
-  return(headways_pico)
+  return(headways)
 
 }
